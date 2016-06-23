@@ -16,79 +16,68 @@ public class MainActivity extends Activity {
     private static Pattern INVALID_INPUT_PATTERN = Pattern.compile("(.*\\..*\\.)|(^0\\d) ");
     private static Pattern INVALID_OPERATION = Pattern.compile("");
     private static final String TAG = "MainActivity";
-    Button btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn0, btnDot, equal, clear;
 
-    TextView disp;
-    float acc;
-    float input1;
-    Button btnAdd;
-    Button btnSub;
-    Button btnMult;
-    Button mBtnDiv;
+    private TextView mDisp;
+    float mAcc;
     Operation mLastOperation;
     boolean mInitialized;
 
-
-    /**
-     * Called when the activity is first created.
-     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setUpDigitbuttons();
-        setUpOperationbuttons();
+        mSetUpDigitbuttons();
+        mSetUpOperationbuttons();
 
-        disp = (TextView) findViewById(R.id.display);
+        mDisp = (TextView) findViewById(R.id.mDisplay);
 
         mInitialized = false;
     }
 
-    private void setUpOperationbuttons() {
-        btnAdd = (Button) findViewById(R.id.btnAdd);
-        btnSub = (Button) findViewById(R.id.btnSub);
-        btnMult = (Button) findViewById(R.id.btnMult);
-        mBtnDiv = (Button) findViewById(R.id.btnDiv);
-        clear = (Button) findViewById(R.id.clear);
-        equal = (Button) findViewById(R.id.equal);
+    private void mSetUpOperationbuttons() {
+        Button btnAdd = (Button) findViewById(R.id.mBtnAdd);
+        Button btnSub = (Button) findViewById(R.id.mBtnSub);
+        Button btnMult = (Button) findViewById(R.id.mBtnMult);
+        Button btnDiv = (Button) findViewById(R.id.mBtnDiv);
+        Button btnClear = (Button) findViewById(R.id.mBtnClear);
+        Button btnEqual = (Button) findViewById(R.id.mBtnEqual);
 
         View.OnClickListener operationButtonsOneClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (operationIsValid(disp.getText().toString())) {
-                    input1 = Float.parseFloat(disp.getText().toString());
-                    disp.setText("");
+                if (mOperationIsValid(mDisp.getText().toString())) {
+                    float input1 = Float.parseFloat(mDisp.getText().toString());
+                    mDisp.setText("");
                     switch (view.getId()) {
-                        case R.id.clear:
-                            acc = 0;
-                            input1 = 0;
+                        case R.id.mBtnClear:
+                            mAcc = 0;
                             mInitialized = false;
-                            disp.setText("");
+                            mDisp.setText("");
                             break;
-                        case R.id.btnAdd:
-                            performCalculus(new AddOperation(), input1);
-                            disp.setText("");
+                        case R.id.mBtnAdd:
+                            mPerformCalculus(new AddOperation(), input1);
+                            mDisp.setText("");
 //
                             break;
-                        case R.id.btnSub:
-                            performCalculus(new SubOperation(), input1);
-                            disp.setText("");
+                        case R.id.mBtnSub:
+                            mPerformCalculus(new SubOperation(), input1);
+                            mDisp.setText("");
                             break;
-                        case R.id.btnMult:
-                            performCalculus(new MultOperation(), input1);
-                            disp.setText("");
+                        case R.id.mBtnMult:
+                            mPerformCalculus(new MultOperation(), input1);
+                            mDisp.setText("");
                             break;
-                        case R.id.btnDiv:
-                            performCalculus(new DivOperation(), input1);
-                            disp.setText("");
+                        case R.id.mBtnDiv:
+                            mPerformCalculus(new DivOperation(), input1);
+                            mDisp.setText("");
                             break;
-                        case R.id.equal:
-                            performCalculus(new Equal(), input1);
+                        case R.id.mBtnEqual:
+                            mPerformCalculus(new Equal(), input1);
 
 
                             break;
                         default:
-                            disp.append(((Button) view).getText());
+                            mDisp.append(((Button) view).getText());
                     }
                 }
             }
@@ -98,35 +87,33 @@ public class MainActivity extends Activity {
         btnAdd.setOnClickListener(operationButtonsOneClickListener);
         btnSub.setOnClickListener(operationButtonsOneClickListener);
         btnMult.setOnClickListener(operationButtonsOneClickListener);
-        mBtnDiv.setOnClickListener(operationButtonsOneClickListener);
-        clear.setOnClickListener(operationButtonsOneClickListener);
-        equal.setOnClickListener(operationButtonsOneClickListener);
+        btnDiv.setOnClickListener(operationButtonsOneClickListener);
+        btnClear.setOnClickListener(operationButtonsOneClickListener);
+        btnEqual.setOnClickListener(operationButtonsOneClickListener);
     }
 
-    private void setUpDigitbuttons() {
-        btn1 = (Button) findViewById(R.id.btn1);
-        btn2 = (Button) findViewById(R.id.btn2);
-        btn3 = (Button) findViewById(R.id.btn3);
-        btn4 = (Button) findViewById(R.id.btn4);
-        btn5 = (Button) findViewById(R.id.btn5);
-        btn6 = (Button) findViewById(R.id.btn6);
-        btn7 = (Button) findViewById(R.id.btn7);
-        btn8 = (Button) findViewById(R.id.btn8);
-        btn9 = (Button) findViewById(R.id.btn9);
-        btn0 = (Button) findViewById(R.id.btn0);
-        btnDot = (Button) findViewById(R.id.btnDot);
-
+    private void mSetUpDigitbuttons() {
+        Button btn1 = (Button) findViewById(R.id.mBtn1);
+        Button btn2 = (Button) findViewById(R.id.mBtn2);
+        Button btn3 = (Button) findViewById(R.id.mBtn3);
+        Button btn4 = (Button) findViewById(R.id.mBtn4);
+        Button btn5 = (Button) findViewById(R.id.mBtn5);
+        Button btn6 = (Button) findViewById(R.id.mBtn6);
+        Button btn7 = (Button) findViewById(R.id.mBtn7);
+        Button btn8 = (Button) findViewById(R.id.mBtn8);
+        Button btn9 = (Button) findViewById(R.id.mBtn9);
+        Button btn0 = (Button) findViewById(R.id.mBtn0);
+        Button btnDot = (Button) findViewById(R.id.mBtnDot);
 
         View.OnClickListener digiButtonsClickLisetener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String newValue = disp.getText().toString() + ((Button) view).getText();
-                if (valueIsValid(newValue)) {
-                    disp.setText(newValue);
+                String newValue = mDisp.getText().toString() + ((Button) view).getText();
+                if (mValueIsValid(newValue)) {
+                    mDisp.setText(newValue);
                 }
             }
         };
-
 
         btn1.setOnClickListener(digiButtonsClickLisetener);
         btn2.setOnClickListener(digiButtonsClickLisetener);
@@ -142,7 +129,7 @@ public class MainActivity extends Activity {
 
     }
 
-    private boolean valueIsValid(String text) {
+    private boolean mValueIsValid(String text) {
         Matcher matcher = INVALID_INPUT_PATTERN.matcher(text);
         if (matcher.matches()) {
             Log.d(TAG, "detected invalid pattern");
@@ -151,7 +138,7 @@ public class MainActivity extends Activity {
         return true;
     }
 
-    private boolean operationIsValid(String text) {
+    private boolean mOperationIsValid(String text) {
         Matcher matcher = INVALID_OPERATION.matcher(text);
         if (matcher.matches()) {
             Log.d(TAG, "detected invalid pattern");
@@ -161,13 +148,13 @@ public class MainActivity extends Activity {
     }
 
 
-    private void performCalculus(Operation newOperation, float input) {
+    private void mPerformCalculus(Operation newOperation, float input) {
         if (!mInitialized) {
-            acc = input;
+            mAcc = input;
             mInitialized = true;
         } else {
-            acc = mLastOperation.performOperation(acc, input);
-            disp.setText(Float.toString(acc).trim());
+            mAcc = mLastOperation.performOperation(mAcc, input);
+            mDisp.setText(Float.toString(mAcc).trim());
 
         }
         mLastOperation = newOperation;
@@ -208,7 +195,7 @@ public class MainActivity extends Activity {
     class Equal implements Operation {
         @Override
         public float performOperation(float input1, float input2) {
-            return acc;
+            return mAcc;
         }
     }
 }

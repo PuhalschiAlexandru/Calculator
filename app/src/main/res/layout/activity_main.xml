@@ -11,7 +11,7 @@
     ≠
 
     <Button
-        android:id="@+id/btn7"
+        android:id="@+id/mBtn7"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_alignParentLeft="true"
@@ -22,149 +22,149 @@
         android:text="7" />
 
     <Button
-        android:id="@+id/btn8"
+        android:id="@+id/mBtn8"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_alignBottom="@+id/btn7"
+        android:layout_alignBottom="@+id/mBtn7"
         android:layout_marginLeft="22dp"
         android:layout_marginStart="22dp"
-        android:layout_toEndOf="@+id/btn7"
-        android:layout_toRightOf="@+id/btn7"
+        android:layout_toEndOf="@+id/mBtn7"
+        android:layout_toRightOf="@+id/mBtn7"
         android:text="8" />
 
     <Button
-        android:id="@+id/btn9"
+        android:id="@+id/mBtn9"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_alignBottom="@+id/btn8"
+        android:layout_alignBottom="@+id/mBtn8"
         android:layout_marginLeft="22dp"
         android:layout_marginStart="22dp"
-        android:layout_toEndOf="@+id/btn8"
-        android:layout_toRightOf="@+id/btn8"
+        android:layout_toEndOf="@+id/mBtn8"
+        android:layout_toRightOf="@+id/mBtn8"
         android:text="9" />
 
     <Button
-        android:id="@+id/btn4"
+        android:id="@+id/mBtn4"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/btn8"
+        android:layout_below="@+id/mBtn8"
         android:layout_marginTop="21dp"
         android:text="4" />
 
     <Button
-        android:id="@+id/btn5"
+        android:id="@+id/mBtn5"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_alignLeft="@+id/btn8"
-        android:layout_alignStart="@+id/btn8"
-        android:layout_alignTop="@+id/btn4"
+        android:layout_alignLeft="@+id/mBtn8"
+        android:layout_alignStart="@+id/mBtn8"
+        android:layout_alignTop="@+id/mBtn4"
         android:text="5" />
 
     <Button
-        android:id="@+id/btn6"
+        android:id="@+id/mBtn6"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_alignLeft="@+id/btn9"
-        android:layout_alignStart="@+id/btn9"
-        android:layout_alignTop="@+id/btn5"
+        android:layout_alignLeft="@+id/mBtn9"
+        android:layout_alignStart="@+id/mBtn9"
+        android:layout_alignTop="@+id/mBtn5"
         android:text="6" />
 
     <Button
-        android:id="@+id/btn1"
+        android:id="@+id/mBtn1"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/btn4"
+        android:layout_below="@+id/mBtn4"
         android:layout_marginTop="21dp"
         android:text="1" />
 
     <Button
-        android:id="@+id/btn2"
+        android:id="@+id/mBtn2"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_alignLeft="@+id/btn5"
-        android:layout_alignStart="@+id/btn5"
-        android:layout_alignTop="@+id/btn1"
+        android:layout_alignLeft="@+id/mBtn5"
+        android:layout_alignStart="@+id/mBtn5"
+        android:layout_alignTop="@+id/mBtn1"
         android:text="2" />
 
     <Button
-        android:id="@+id/btn3"
+        android:id="@+id/mBtn3"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_alignLeft="@+id/btn6"
-        android:layout_alignStart="@+id/btn6"
-        android:layout_alignTop="@+id/btn2"
+        android:layout_alignLeft="@+id/mBtn6"
+        android:layout_alignStart="@+id/mBtn6"
+        android:layout_alignTop="@+id/mBtn2"
         android:text="3" />
 
     <Button
-        android:id="@+id/btn0"
+        android:id="@+id/mBtn0"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/btn1"
+        android:layout_below="@+id/mBtn1"
         android:layout_marginTop="21dp"
         android:text="0" />
 
     <Button
-        android:id="@+id/btnDot"
+        android:id="@+id/mBtnDot"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_alignLeft="@+id/btn2"
-        android:layout_alignStart="@+id/btn2"
-        android:layout_alignTop="@+id/btn0"
+        android:layout_alignLeft="@+id/mBtn2"
+        android:layout_alignStart="@+id/mBtn2"
+        android:layout_alignTop="@+id/mBtn0"
         android:text="." />
 
     <Button
-        android:id="@+id/equal"
+        android:id="@+id/mBtnEqual"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_alignBottom="@+id/btnDot"
-        android:layout_alignLeft="@+id/btn3"
-        android:layout_alignStart="@+id/btn3"
+        android:layout_alignBottom="@+id/mBtnDot"
+        android:layout_alignLeft="@+id/mBtn3"
+        android:layout_alignStart="@+id/mBtn3"
         android:text="=" />
 
     <Button
-        android:id="@+id/btnSub"
+        android:id="@+id/mBtnSub"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/btn6"
+        android:layout_alignTop="@+id/mBtn6"
         android:text="-" />
 
     <Button
-        android:id="@+id/btnMult"
+        android:id="@+id/mBtnMult"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_alignLeft="@+id/btnSub"
-        android:layout_alignStart="@+id/btnSub"
-        android:layout_alignTop="@+id/btn3"
+        android:layout_alignLeft="@+id/mBtnSub"
+        android:layout_alignStart="@+id/mBtnSub"
+        android:layout_alignTop="@+id/mBtn3"
         android:text="*" />
 
     <Button
-        android:id="@+id/btnDiv"
+        android:id="@+id/mBtnDiv"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_alignLeft="@+id/btnMult"
-        android:layout_alignStart="@+id/btnMult"
-        android:layout_alignTop="@+id/equal"
+        android:layout_alignLeft="@+id/mBtnMult"
+        android:layout_alignStart="@+id/mBtnMult"
+        android:layout_alignTop="@+id/mBtnEqual"
         android:text="/" />
 
     <Button
-        android:id="@+id/btnAdd"
+        android:id="@+id/mBtnAdd"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_alignBottom="@+id/btn9"
-        android:layout_alignLeft="@+id/btnSub"
-        android:layout_alignStart="@+id/btnSub"
+        android:layout_alignBottom="@+id/mBtn9"
+        android:layout_alignLeft="@+id/mBtnSub"
+        android:layout_alignStart="@+id/mBtnSub"
         android:text="+" />
 
     <TextView
-        android:id="@+id/display"
+        android:id="@+id/mDisplay"
         android:layout_width="200dp"
         android:layout_height="60dp"
         android:gravity="end"
@@ -178,10 +178,10 @@
 
 
     <Button
-        android:id="@+id/clear"
+        android:id="@+id/mBtnClear"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_above="@+id/btn9"
+        android:layout_above="@+id/mBtn9"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:text="C" />
@@ -193,7 +193,7 @@
         android:text="Introduceti Numerele:"
         android:id="@+id/textView"
         android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/clear"
-        android:layout_alignEnd="@+id/clear" />
+        android:layout_alignRight="@+id/mBtnClear"
+        android:layout_alignEnd="@+id/mBtnClear" />
 
 </RelativeLayout>
