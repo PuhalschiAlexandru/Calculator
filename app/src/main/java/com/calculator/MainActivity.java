@@ -11,10 +11,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class MainActivity extends Activity  {
+public class MainActivity extends Activity {
 
     private static Pattern INVALID_INPUT_PATTERN = Pattern.compile("(.*\\..*\\.)|(^0\\d) ");
-//    private static Pattern INVALID_OPERATION = Pattern.compile("(\\+*\\+\\+*\\+) ");
     private static Pattern INVALID_OPERATION = Pattern.compile("");
     private static final String TAG = "MainActivity";
     Button btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn0, btnDot, equal, clear;
@@ -22,8 +21,6 @@ public class MainActivity extends Activity  {
     TextView disp;
     float acc;
     float input1;
-    float input2;
-    String optr;
     Button btnAdd;
     Button btnSub;
     Button btnMult;
@@ -41,14 +38,8 @@ public class MainActivity extends Activity  {
         setContentView(R.layout.activity_main);
         setUpDigitbuttons();
         setUpOperationbuttons();
-//        AddOperation AddNumb = new AddOperation();
 
-        // find the elements
         disp = (TextView) findViewById(R.id.display);
-//        equal = (Button) findViewById(R.id.equal);
-//        clear = (Button) findViewById(R.id.clear);
-
-
 
         mInitialized = false;
     }
@@ -59,7 +50,7 @@ public class MainActivity extends Activity  {
         btnMult = (Button) findViewById(R.id.btnMult);
         mBtnDiv = (Button) findViewById(R.id.btnDiv);
         clear = (Button) findViewById(R.id.clear);
-        equal= (Button) findViewById(R.id.equal);
+        equal = (Button) findViewById(R.id.equal);
 
         View.OnClickListener operationButtonsOneClickListener = new View.OnClickListener() {
             @Override
@@ -67,34 +58,38 @@ public class MainActivity extends Activity  {
                 if (operationIsValid(disp.getText().toString())) {
                     input1 = Float.parseFloat(disp.getText().toString());
                     disp.setText("");
-                switch (view.getId()) {
-                    case R.id.clear:
-                        acc = 0;
-                        input1 = 0;
-                        mInitialized = false;
-                        disp.setText("");
-                        break;
-                    case R.id.btnAdd:
-                        performCalculus(new AddOperation(), input1);
+                    switch (view.getId()) {
+                        case R.id.clear:
+                            acc = 0;
+                            input1 = 0;
+                            mInitialized = false;
+                            disp.setText("");
+                            break;
+                        case R.id.btnAdd:
+                            performCalculus(new AddOperation(), input1);
+                            disp.setText("");
 //
-                        break;
-                    case R.id.btnSub:
-                        performCalculus(new SubOperation(), input1);
-                        break;
-                    case R.id.btnMult:
-                        performCalculus(new MultOperation(), input1);
-                        break;
-                    case R.id.btnDiv:
-                        performCalculus(new DivOperation(), input1);
-                        break;
-                    case R.id.equal:
-                        performCalculus(new Equal(),input1);
-                        
+                            break;
+                        case R.id.btnSub:
+                            performCalculus(new SubOperation(), input1);
+                            disp.setText("");
+                            break;
+                        case R.id.btnMult:
+                            performCalculus(new MultOperation(), input1);
+                            disp.setText("");
+                            break;
+                        case R.id.btnDiv:
+                            performCalculus(new DivOperation(), input1);
+                            disp.setText("");
+                            break;
+                        case R.id.equal:
+                            performCalculus(new Equal(), input1);
 
-                        break;
-                    default:
-                        disp.append(((Button) view).getText());
-                }
+
+                            break;
+                        default:
+                            disp.append(((Button) view).getText());
+                    }
                 }
             }
 
@@ -106,7 +101,7 @@ public class MainActivity extends Activity  {
         mBtnDiv.setOnClickListener(operationButtonsOneClickListener);
         clear.setOnClickListener(operationButtonsOneClickListener);
         equal.setOnClickListener(operationButtonsOneClickListener);
-        }
+    }
 
     private void setUpDigitbuttons() {
         btn1 = (Button) findViewById(R.id.btn1);
@@ -132,7 +127,7 @@ public class MainActivity extends Activity  {
             }
         };
 
-        // set a listener
+
         btn1.setOnClickListener(digiButtonsClickLisetener);
         btn2.setOnClickListener(digiButtonsClickLisetener);
         btn3.setOnClickListener(digiButtonsClickLisetener);
@@ -188,24 +183,28 @@ public class MainActivity extends Activity  {
             return input1 + input2;
         }
     }
+
     class SubOperation implements Operation {
         @Override
         public float performOperation(float input1, float input2) {
             return input1 - input2;
         }
     }
+
     class MultOperation implements Operation {
         @Override
         public float performOperation(float input1, float input2) {
             return input1 * input2;
         }
     }
+
     class DivOperation implements Operation {
         @Override
         public float performOperation(float input1, float input2) {
             return input1 / input2;
         }
     }
+
     class Equal implements Operation {
         @Override
         public float performOperation(float input1, float input2) {
