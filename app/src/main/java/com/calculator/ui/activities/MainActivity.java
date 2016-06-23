@@ -1,4 +1,4 @@
-package com.calculator;
+package com.calculator.ui.activities;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.calculator.R;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
