@@ -163,17 +163,19 @@
         android:layout_alignStart="@+id/btnSub"
         android:text="+" />
 
-    <EditText
+    <TextView
         android:id="@+id/display"
         android:layout_width="200dp"
         android:layout_height="60dp"
-        android:layout_alignEnd="@+id/clear"
-        android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/clear"
-        android:layout_marginTop="20dp"
-        android:gravity="right"
+        android:gravity="end"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textCursorDrawable="@null" />
+        android:textCursorDrawable="@null"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:layout_below="@+id/textView"
+        android:layout_alignRight="@+id/textView"
+        android:layout_alignEnd="@+id/textView" />
+
 
     <Button
         android:id="@+id/clear"
@@ -183,5 +185,15 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:text="C" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Introduceti Numerele:"
+        android:id="@+id/textView"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/clear"
+        android:layout_alignEnd="@+id/clear" />
 
 </RelativeLayout>

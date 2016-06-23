@@ -1,30 +1,37 @@
 package com.calculator;
 
 import android.app.Activity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.method.KeyListener;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.content.Intent;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
-public class MainActivity extends Activity implements View.OnClickListener {
+public class MainActivity extends Activity  {
 
+    private static Pattern INVALID_INPUT_PATTERN = Pattern.compile("(.*\\..*\\.)|(^0\\d) ");
+//    private static Pattern INVALID_OPERATION = Pattern.compile("(\\+*\\+\\+*\\+) ");
+    private static Pattern INVALID_OPERATION = Pattern.compile("");
+    private static final String TAG = "MainActivity";
     Button btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn0, btnDot, equal, clear;
 
-    EditText disp;
-    int op1;
-    int op2;
+    TextView disp;
+    float acc;
+    float input1;
+    float input2;
     String optr;
     Button btnAdd;
     Button btnSub;
     Button btnMult;
-    Button btnDiv;
-    KeyListener mKeyListener;
+    Button mBtnDiv;
+    Operation mLastOperation;
+    boolean mInitialized;
+
+
     /**
      * Called when the activity is first created.
      */
@@ -32,13 +39,76 @@ public class MainActivity extends Activity implements View.OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setUpDigitbuttons();
+        setUpOperationbuttons();
+//        AddOperation AddNumb = new AddOperation();
 
         // find the elements
-        disp = (EditText) findViewById(R.id.display);
+        disp = (TextView) findViewById(R.id.display);
+//        equal = (Button) findViewById(R.id.equal);
+//        clear = (Button) findViewById(R.id.clear);
+
+
+
+        mInitialized = false;
+    }
+
+    private void setUpOperationbuttons() {
         btnAdd = (Button) findViewById(R.id.btnAdd);
         btnSub = (Button) findViewById(R.id.btnSub);
         btnMult = (Button) findViewById(R.id.btnMult);
-        btnDiv = (Button) findViewById(R.id.btnDiv);
+        mBtnDiv = (Button) findViewById(R.id.btnDiv);
+        clear = (Button) findViewById(R.id.clear);
+        equal= (Button) findViewById(R.id.equal);
+
+        View.OnClickListener operationButtonsOneClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (operationIsValid(disp.getText().toString())) {
+                    input1 = Float.parseFloat(disp.getText().toString());
+                    disp.setText("");
+                switch (view.getId()) {
+                    case R.id.clear:
+                        acc = 0;
+                        input1 = 0;
+                        mInitialized = false;
+                        disp.setText("");
+                        break;
+                    case R.id.btnAdd:
+                        performCalculus(new AddOperation(), input1);
+//
+                        break;
+                    case R.id.btnSub:
+                        performCalculus(new SubOperation(), input1);
+                        break;
+                    case R.id.btnMult:
+                        performCalculus(new MultOperation(), input1);
+                        break;
+                    case R.id.btnDiv:
+                        performCalculus(new DivOperation(), input1);
+                        break;
+                    case R.id.equal:
+                        performCalculus(new Equal(),input1);
+                        
+
+                        break;
+                    default:
+                        disp.append(((Button) view).getText());
+                }
+                }
+            }
+
+        };
+
+        btnAdd.setOnClickListener(operationButtonsOneClickListener);
+        btnSub.setOnClickListener(operationButtonsOneClickListener);
+        btnMult.setOnClickListener(operationButtonsOneClickListener);
+        mBtnDiv.setOnClickListener(operationButtonsOneClickListener);
+        clear.setOnClickListener(operationButtonsOneClickListener);
+        equal.setOnClickListener(operationButtonsOneClickListener);
+        }
+
+    private void setUpDigitbuttons() {
         btn1 = (Button) findViewById(R.id.btn1);
         btn2 = (Button) findViewById(R.id.btn2);
         btn3 = (Button) findViewById(R.id.btn3);
@@ -50,238 +120,96 @@ public class MainActivity extends Activity implements View.OnClickListener {
         btn9 = (Button) findViewById(R.id.btn9);
         btn0 = (Button) findViewById(R.id.btn0);
         btnDot = (Button) findViewById(R.id.btnDot);
-        equal = (Button) findViewById(R.id.equal);
-        clear = (Button) findViewById(R.id.clear);
+
+
+        View.OnClickListener digiButtonsClickLisetener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String newValue = disp.getText().toString() + ((Button) view).getText();
+                if (valueIsValid(newValue)) {
+                    disp.setText(newValue);
+                }
+            }
+        };
 
         // set a listener
-        btn1.setOnClickListener(this);
-        btn2.setOnClickListener(this);
-        btn3.setOnClickListener(this);
-        btn4.setOnClickListener(this);
-        btn5.setOnClickListener(this);
-        btn6.setOnClickListener(this);
-        btn7.setOnClickListener(this);
-        btn8.setOnClickListener(this);
-        btn9.setOnClickListener(this);
-        btn0.setOnClickListener(this);
-        btnDot.setOnClickListener(this);
-        btnAdd.setOnClickListener(this);
-        btnSub.setOnClickListener(this);
-        btnMult.setOnClickListener(this);
-        btnDiv.setOnClickListener(this);
-        clear.setOnClickListener(this);
-        equal.setOnClickListener(this);
-        KeyListener mKeyListener = disp.getKeyListener();
+        btn1.setOnClickListener(digiButtonsClickLisetener);
+        btn2.setOnClickListener(digiButtonsClickLisetener);
+        btn3.setOnClickListener(digiButtonsClickLisetener);
+        btn4.setOnClickListener(digiButtonsClickLisetener);
+        btn5.setOnClickListener(digiButtonsClickLisetener);
+        btn6.setOnClickListener(digiButtonsClickLisetener);
+        btn7.setOnClickListener(digiButtonsClickLisetener);
+        btn8.setOnClickListener(digiButtonsClickLisetener);
+        btn9.setOnClickListener(digiButtonsClickLisetener);
+        btn0.setOnClickListener(digiButtonsClickLisetener);
+        btnDot.setOnClickListener(digiButtonsClickLisetener);
+
+    }
+
+    private boolean valueIsValid(String text) {
+        Matcher matcher = INVALID_INPUT_PATTERN.matcher(text);
+        if (matcher.matches()) {
+            Log.d(TAG, "detected invalid pattern");
+            return false;
+        }
+        return true;
+    }
+
+    private boolean operationIsValid(String text) {
+        Matcher matcher = INVALID_OPERATION.matcher(text);
+        if (matcher.matches()) {
+            Log.d(TAG, "detected invalid pattern");
+            return false;
+        }
+        return true;
     }
 
 
-    public void operation() {
-        disp.setKeyListener(mKeyListener);
-        if (optr.equals("+")) {
-            op2 = Integer.parseInt(disp.getText().toString());
-            disp.setText("");
-            op1 = op1 + op2;
-            disp.setText(Integer.toString(op1));
-        } else if (optr.equals("-")) {
-            op2 = Integer.parseInt(disp.getText().toString());
-            disp.setText("");
-            op1 = op1 - op2;
-            disp.setText(Integer.toString(op1));
-        } else if (optr.equals("*")) {
-            op2 = Integer.parseInt(disp.getText().toString());
-            disp.setText("");
-            op1 = op1 * op2;
-            disp.setText(Integer.toString(op1));
-        } else if (optr.equals("/")) {
-            op2 = Integer.parseInt(disp.getText().toString());
-            if (op2 == 0) {
-                op2 = 999;
-            }
-            disp.setText("");
-            op1 = op1 / op2;
-            disp.setText(Integer.toString(op1));
+    private void performCalculus(Operation newOperation, float input) {
+        if (!mInitialized) {
+            acc = input;
+            mInitialized = true;
+        } else {
+            acc = mLastOperation.performOperation(acc, input);
+            disp.setText(Float.toString(acc).trim());
+
+        }
+        mLastOperation = newOperation;
+    }
+
+    public interface Operation {
+        float performOperation(float input1, float input2);
+    }
+
+    class AddOperation implements Operation {
+        @Override
+        public float performOperation(float input1, float input2) {
+            return input1 + input2;
         }
     }
-
-    @Override
-    public void onClick(View arg0) {
-        Editable str = disp.getText();
-        switch (arg0.getId()) {
-            case R.id.btn1:
-                if (op2 != 0) {
-                    op2 = 0;
-                    disp.setText("");
-                }
-                str = str.append(btn1.getText());
-                disp.setText(str);
-                break;
-            case R.id.btn2:
-                if (op2 != 0) {
-                    op2 = 0;
-                    disp.setText("");
-                }
-                str = str.append(btn2.getText());
-                disp.setText(str);
-                break;
-            case R.id.btn3:
-                if (op2 != 0) {
-                    op2 = 0;
-                    disp.setText("");
-                }
-                str = str.append(btn3.getText());
-                disp.setText(str);
-                break;
-            case R.id.btn4:
-                if (op2 != 0) {
-                    op2 = 0;
-                    disp.setText("");
-                }
-                str = str.append(btn4.getText());
-                disp.setText(str);
-                break;
-            case R.id.btn5:
-                if (op2 != 0) {
-                    op2 = 0;
-                    disp.setText("");
-                }
-                str = str.append(btn5.getText());
-                disp.setText(str);
-                break;
-            case R.id.btn6:
-                if (op2 != 0) {
-                    op2 = 0;
-                    disp.setText("");
-                }
-                str = str.append(btn6.getText());
-                disp.setText(str);
-                break;
-            case R.id.btn7:
-                if (op2 != 0) {
-                    op2 = 0;
-                    disp.setText("");
-                }
-                str = str.append(btn7.getText());
-                disp.setText(str);
-                break;
-            case R.id.btn8:
-                if (op2 != 0) {
-                    op2 = 0;
-                    disp.setText("");
-                }
-                str = str.append(btn8.getText());
-                disp.setText(str);
-                break;
-            case R.id.btn9:
-                if (op2 != 0) {
-                    op2 = 0;
-                    disp.setText("");
-                }
-                str = str.append(btn9.getText());
-                disp.setText(str);
-                break;
-            case R.id.btn0:
-                if (op2 != 0) {
-                    op2 = 0;
-                    disp.setText("");
-                }
-                str = str.append(btn0.getText());
-                disp.setText(str);
-                break;
-            case R.id.clear:
-                op1 = 0;
-                op2 = 0;
-                disp.setText("");
-                break;
-            case R.id.btnAdd:
-                optr = "+";
-                if (op1 == 0) {
-                    op1 = Integer.parseInt(disp.getText().toString().trim());
-                    disp.setText("");
-                } else if (op2 != 0) {
-                    op2 = 0;
-                    disp.setText("");
-                } else {
-                    op2 = Integer.parseInt(disp.getText().toString().trim());
-                    disp.setText("");
-                    op1 = op1 + op2;
-                    disp.setText(Integer.toString(op1));
-                }
-                break;
-            case R.id.btnSub:
-                optr = "-";
-                if (op1 == 0) {
-                    op1 = Integer.parseInt(disp.getText().toString().trim());
-                    disp.setText("");
-                } else if (op2 != 0) {
-                    op2 = 0;
-                    disp.setText("");
-                } else {
-                    op2 = Integer.parseInt(disp.getText().toString().trim());
-                    disp.setText("");
-                    op1 = op1 - op2;
-                    disp.setText(Integer.toString(op1));
-                }
-                break;
-            case R.id.btnMult:
-                optr = "*";
-                if (op1 == 0) {
-                    op1 = Integer.parseInt(disp.getText().toString().trim());
-                    disp.setText("");
-                } else if (op2 != 0) {
-                    op2 = 0;
-                    disp.setText("");
-                } else {
-                    op2 = Integer.parseInt(disp.getText().toString().trim());
-                    disp.setText("");
-                    op1 = op1 * op2;
-                    disp.setText(Integer.toString(op1));
-                }
-                break;
-            case R.id.btnDiv:
-                optr = "/";
-                op2 = 1;
-                if (op1 == 0) {
-                    op1 = Integer.parseInt(disp.getText().toString().trim());
-                    disp.setText("");
-                } else if (op2 != 0) {
-                    op2 = 0;
-                    disp.setText("");
-                } else {
-                    op2 = Integer.parseInt(disp.getText().toString().trim());
-                    if (op2 == 0) {
-                        disp.setText("");
-                        disp.setText("Erroare); ");
-                    }
-                    disp.setText(""); /*op1 = op1 / op2;*/
-                    disp.setText(Integer.toString(op1));
-                }
-
-                break;
-            case R.id.equal:
-                if (optr != null) {
-                    disp.setKeyListener(null);
-                    if (op2 != 0) {
-                        if (optr.equals("+")) {
-                            disp.setText("");
-                            op1 = op1 + op2;
-                            disp.setText(Integer.toString(op1));
-                        } else if (optr.equals("-")) {
-                            disp.setText(Integer.toString(op1));
-                        } else if (optr.equals("*")) {
-                            disp.setText("");/* op1 = op1 * op2;*/
-                            disp.setText(Integer.toString(op1));
-                        } else if (optr.equals("/") && op2 != 0) {
-                            disp.setText("");/* op1 = op1 / op2;*/
-                            disp.setText(Integer.toString(op1));
-                        } else if (optr.equals("/") && op2 == 0) {
-                            disp.setText("Eroare");
-                        }
-                    } else {
-                        operation();
-                    }
-                }
-
-                break;
+    class SubOperation implements Operation {
+        @Override
+        public float performOperation(float input1, float input2) {
+            return input1 - input2;
+        }
+    }
+    class MultOperation implements Operation {
+        @Override
+        public float performOperation(float input1, float input2) {
+            return input1 * input2;
+        }
+    }
+    class DivOperation implements Operation {
+        @Override
+        public float performOperation(float input1, float input2) {
+            return input1 / input2;
+        }
+    }
+    class Equal implements Operation {
+        @Override
+        public float performOperation(float input1, float input2) {
+            return acc;
         }
     }
 }
