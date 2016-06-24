@@ -2,6 +2,7 @@ package com.calculator.ui.activities;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -15,10 +16,14 @@ import java.util.regex.Pattern;
 
 public class MainActivity extends Activity {
 
+    static final String SAVE_ACC = "saveacc";
+    static final String SAVE_DISP = "savedisp";
+    static final String SAVE_INIT = "saveinitialize";
+    static final String SAVE_INPUT = "saveinput";
     private static Pattern INVALID_INPUT_PATTERN = Pattern.compile("(.*\\..*\\.)|(^0\\d) ");
     private static Pattern INVALID_OPERATION = Pattern.compile("");
     private static final String TAG = "MainActivity";
-
+    String mOper;
     private TextView mDisp;
     float mAcc;
     Operation mLastOperation;
@@ -59,23 +64,41 @@ public class MainActivity extends Activity {
                         case R.id.mBtnAdd:
                             mPerformCalculus(new AddOperation(), input1);
                             mDisp.setText("");
-//
+                            mOper=("+");
                             break;
                         case R.id.mBtnSub:
                             mPerformCalculus(new SubOperation(), input1);
                             mDisp.setText("");
+                            mOper = ("-");
                             break;
                         case R.id.mBtnMult:
                             mPerformCalculus(new MultOperation(), input1);
                             mDisp.setText("");
+                            mOper = ("*");
                             break;
                         case R.id.mBtnDiv:
                             mPerformCalculus(new DivOperation(), input1);
                             mDisp.setText("");
+                            mOper = ("/");
                             break;
                         case R.id.mBtnEqual:
-                            mPerformCalculus(new Equal(), input1);
-
+//                            mPerformCalculus(new Equal(), input1);
+                            if(mOper=="+"){
+                            mPerformCalculus(new AddOperation(), input1);
+                                mInitialized = true;
+                        }
+                            if(mOper=="-"){
+                                mPerformCalculus(new AddOperation(), input1);
+                                mInitialized = true;
+                            }
+                            if(mOper=="*"){
+                                mPerformCalculus(new AddOperation(), input1);
+                                mInitialized = true;
+                            }
+                            if(mOper=="/"){
+                                mPerformCalculus(new AddOperation(), input1);
+                                mInitialized = true;
+                            }
 
                             break;
                         default:
@@ -111,10 +134,9 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
                 String newValue = mDisp.getText().toString() + ((Button) view).getText();
-                if(newValue.equals(".")){
+                if (newValue.equals(".")) {
                     mDisp.setText("0.");
-                }
-                else if (mValueIsValid(newValue)) {
+                } else if (mValueIsValid(newValue)) {
                     mDisp.setText(newValue);
                 }
             }
@@ -203,7 +225,32 @@ public class MainActivity extends Activity {
             return mAcc;
         }
     }
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        String stateToSave = mDisp.getText().toString();
+        Float accToSave = mAcc;
+        String operToSave = mOper;
+        outState.putString("saved_state", stateToSave);
+        outState.putFloat("acc_state",accToSave);
+        outState.putString("oper_state",operToSave);
+
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        String savedState = savedInstanceState.getString("saved_state");
+        Float savedAcc = savedInstanceState.getFloat("acc_state");
+        String savedOper = savedInstanceState.getString("oper_state");
+        mOper = savedOper;
+        mAcc = savedAcc;
+        mDisp.setText(savedState);
+    }
 }
+
 
 
 
