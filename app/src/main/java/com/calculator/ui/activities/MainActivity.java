@@ -111,7 +111,10 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
                 String newValue = mDisp.getText().toString() + ((Button) view).getText();
-                if (mValueIsValid(newValue)) {
+                if(newValue.equals(".")){
+                    mDisp.setText("0.");
+                }
+                else if (mValueIsValid(newValue)) {
                     mDisp.setText(newValue);
                 }
             }
