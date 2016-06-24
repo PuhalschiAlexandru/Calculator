@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,12 +12,11 @@
 
     <TextView
         android:id="@+id/mDisplay"
-        android:layout_width="200dp"
+        android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_alignEnd="@+id/linearLayout"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/linearLayout"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_alignParentRight="true"
         android:layout_below="@+id/textView"
         android:focusable="false"
         android:focusableInTouchMode="false"
@@ -29,139 +29,171 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/linearLayout"
-        android:layout_toStartOf="@+id/linearLayout"
+        android:layout_alignParentRight="true"
         android:text="Introduceti Numerele:"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <GridLayout
-        android:id="@+id/gridLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/linearLayout"
-        android:layout_toStartOf="@+id/linearLayout"
-        android:columnCount="3"
-        android:rowCount="4"
-        android:rowOrderPreserved="true">
-
-        <com.calculator.ui.widgets.SquareButton
-            android:id="@+id/mBtn7"
-            android:layout_column="0"
-            android:layout_row="0"
-            android:onClick="write7"
-            android:text="7" />
-
-        <com.calculator.ui.widgets.SquareButton
-            android:id="@+id/mBtn8"
-            android:layout_column="1"
-            android:layout_row="0"
-            android:text="8" />
-
-        <com.calculator.ui.widgets.SquareButton
-            android:id="@+id/mBtn9"
-            android:layout_column="2"
-            android:layout_row="0"
-            android:text="9" />
-
-        <com.calculator.ui.widgets.SquareButton
-            android:id="@+id/mBtn4"
-            android:layout_column="0"
-            android:layout_row="1"
-            android:text="4" />
-
-        <com.calculator.ui.widgets.SquareButton
-            android:id="@+id/mBtn5"
-            android:layout_column="1"
-            android:layout_row="1"
-            android:text="5" />
-
-        <com.calculator.ui.widgets.SquareButton
-            android:id="@+id/mBtn1"
-            android:layout_column="0"
-            android:layout_row="2"
-            android:text="1" />
-
-        <com.calculator.ui.widgets.SquareButton
-            android:id="@+id/mBtn2"
-            android:layout_column="1"
-            android:layout_row="2"
-            android:text="2" />
-
-        <com.calculator.ui.widgets.SquareButton
-            android:id="@+id/mBtn3"
-            android:layout_column="2"
-            android:layout_row="2"
-            android:text="3" />
-
-        <com.calculator.ui.widgets.SquareButton
-            android:id="@+id/mBtnDot"
-            android:layout_column="1"
-            android:layout_row="3"
-            android:text="." />
-
-        <com.calculator.ui.widgets.SquareButton
-            android:id="@+id/mBtnEqual"
-            android:layout_column="2"
-            android:layout_row="3"
-            android:text="=" />
-
-        <com.calculator.ui.widgets.SquareButton
-            android:id="@+id/mBtn6"
-            android:layout_column="2"
-            android:layout_row="1"
-            android:text="6" />
-
-        <com.calculator.ui.widgets.SquareButton
-            android:id="@+id/mBtn0"
-            android:layout_column="0"
-            android:layout_row="3"
-            android:text="0" />
-
-
-    </GridLayout>
-
     <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/gridLayout"
-        android:orientation="vertical">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="4"
+        android:layout_below="@id/mDisplay">
 
-        <com.calculator.ui.widgets.SquareButton
-            android:id="@+id/mBtnClear"
-            android:layout_width="match_parent"
-            android:layout_height="74dp"
-            android:text="C" />
+        <android.support.v7.widget.GridLayout
+            android:id="@+id/gridLayout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            app:columnCount="3"
+            app:rowCount="4">
 
-        <com.calculator.ui.widgets.SquareButton
-            android:id="@+id/mBtnSub"
-            android:layout_width="match_parent"
-            android:layout_height="74dp"
-            android:text="-" />
+            <Button
+                android:id="@+id/mBtn7"
+                android:onClick="write7"
+                android:text="7"
+                app:layout_column="0"
+                app:layout_columnWeight="1"
+                app:layout_row="0"
+                app:layout_rowWeight="1" />
 
-        <com.calculator.ui.widgets.SquareButton
-            android:id="@+id/mBtnMult"
-            android:layout_width="match_parent"
-            android:layout_height="74dp"
-            android:text="*" />
+            <Button
+                android:id="@+id/mBtn8"
+                android:text="8"
+                app:layout_column="1"
+                app:layout_columnWeight="1"
+                app:layout_row="0"
+                app:layout_rowWeight="1" />
 
-        <com.calculator.ui.widgets.SquareButton
-            android:id="@+id/mBtnDiv"
-            android:layout_width="match_parent"
-            android:layout_height="74dp"
-            android:text="/" />
+            <Button
+                android:id="@+id/mBtn9"
+                android:text="9"
+                app:layout_column="2"
+                app:layout_columnWeight="1"
+                app:layout_row="0"
+                app:layout_rowWeight="1" />
 
-        <com.calculator.ui.widgets.SquareButton
-            android:id="@+id/mBtnAdd"
-            android:layout_width="match_parent"
-            android:layout_height="74dp"
-            android:text="+" />
+            <Button
+                android:id="@+id/mBtn4"
+                android:text="4"
+                app:layout_column="0"
+                app:layout_columnWeight="1"
 
+                app:layout_row="1"
+                app:layout_rowWeight="1" />
+
+            <Button
+                android:id="@+id/mBtn5"
+                android:text="5"
+                app:layout_column="1"
+                app:layout_columnWeight="1"
+
+                app:layout_row="1"
+                app:layout_rowWeight="1" />
+
+            <Button
+                android:id="@+id/mBtn1"
+                android:text="1"
+                app:layout_column="0"
+                app:layout_columnWeight="1"
+
+                app:layout_row="2"
+                app:layout_rowWeight="1" />
+
+            <Button
+                android:id="@+id/mBtn2"
+                android:text="2"
+                app:layout_column="1"
+                app:layout_columnWeight="1"
+                app:layout_row="2"
+
+                app:layout_rowWeight="1" />
+
+            <Button
+                android:id="@+id/mBtn3"
+                android:text="3"
+                app:layout_column="2"
+                app:layout_columnWeight="1"
+
+                app:layout_row="2"
+                app:layout_rowWeight="1" />
+
+            <Button
+                android:id="@+id/mBtnDot"
+                android:text="."
+                app:layout_column="1"
+                app:layout_columnWeight="1"
+
+                app:layout_row="3"
+                app:layout_rowWeight="1" />
+
+            <Button
+                android:id="@+id/mBtnEqual"
+                android:text="="
+                app:layout_column="2"
+                app:layout_columnWeight="1"
+
+                app:layout_row="3"
+                app:layout_rowWeight="1" />
+
+            <Button
+                android:id="@+id/mBtn6"
+                android:text="6"
+                app:layout_column="2"
+                app:layout_columnWeight="1"
+
+                app:layout_row="1"
+                app:layout_rowWeight="1" />
+
+            <Button
+                android:id="@+id/mBtn0"
+                android:text="0"
+                app:layout_column="0"
+                app:layout_columnWeight="1"
+                app:layout_row="3"
+                app:layout_rowWeight="1" />
+
+
+        </android.support.v7.widget.GridLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:paddingLeft="10dp"
+            android:orientation="vertical">
+
+            <com.calculator.ui.widgets.SquareButton
+                android:id="@+id/mBtnClear"
+                android:layout_width="match_parent"
+                android:layout_height="74dp"
+                android:text="C" />
+
+            <com.calculator.ui.widgets.SquareButton
+                android:id="@+id/mBtnSub"
+                android:layout_width="match_parent"
+                android:layout_height="74dp"
+                android:text="-" />
+
+            <com.calculator.ui.widgets.SquareButton
+                android:id="@+id/mBtnMult"
+                android:layout_width="match_parent"
+                android:layout_height="74dp"
+                android:text="*" />
+
+            <com.calculator.ui.widgets.SquareButton
+                android:id="@+id/mBtnDiv"
+                android:layout_width="match_parent"
+                android:layout_height="74dp"
+                android:text="/" />
+
+            <com.calculator.ui.widgets.SquareButton
+                android:id="@+id/mBtnAdd"
+                android:layout_width="match_parent"
+                android:layout_height="74dp"
+                android:text="+" />
+
+        </LinearLayout>
     </LinearLayout>
-
-
 </RelativeLayout>
