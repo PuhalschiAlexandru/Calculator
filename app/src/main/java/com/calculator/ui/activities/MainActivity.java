@@ -2,13 +2,18 @@ package com.calculator.ui.activities;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.calculator.R;
+import com.calculator.math.AddOperation;
+import com.calculator.math.DivOperation;
+import com.calculator.math.Equal;
+import com.calculator.math.MultOperation;
+import com.calculator.math.Operation;
+import com.calculator.math.SubOperation;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -82,7 +87,7 @@ public class MainActivity extends Activity {
                             break;
                         case R.id.mBtnDiv:
                             mPerformCalculus(new DivOperation(), input1);
-                            mDisp.setText("");
+                            mDisp.setText(mDisp.getText().toString()+((Button) view).getText());
                             break;
                         case R.id.mBtnEqual:
                             mPerformCalculus(new Equal(), input1);
@@ -172,46 +177,6 @@ public class MainActivity extends Activity {
         }
         mLastOperation = newOperation;
     }
-
-    public interface Operation {
-        float performOperation(float input1, float input2);
-    }
-
-    class AddOperation implements Operation {
-        @Override
-        public float performOperation(float input1, float input2) {
-            return input1 + input2;
-        }
-    }
-
-    class SubOperation implements Operation {
-        @Override
-        public float performOperation(float input1, float input2) {
-            return input1 - input2;
-        }
-    }
-
-    class MultOperation implements Operation {
-        @Override
-        public float performOperation(float input1, float input2) {
-            return input1 * input2;
-        }
-    }
-
-    class DivOperation implements Operation {
-        @Override
-        public float performOperation(float input1, float input2) {
-            return input1 / input2;
-        }
-    }
-
-    class Equal implements Operation {
-        @Override
-        public float performOperation(float input1, float input2) {
-            return mAcc;
-        }
-    }
-
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
