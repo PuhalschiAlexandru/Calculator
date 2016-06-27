@@ -16,14 +16,21 @@ import java.util.regex.Pattern;
 
 public class MainActivity extends Activity {
 
-    static final String SAVE_ACC = "saveacc";
-    static final String SAVE_DISP = "savedisp";
-    static final String SAVE_INIT = "saveinitialize";
-    static final String SAVE_INPUT = "saveinput";
+
     private static Pattern INVALID_INPUT_PATTERN = Pattern.compile("(.*\\..*\\.)|(^0\\d) ");
     private static Pattern INVALID_OPERATION = Pattern.compile("");
+
+    private static final String SAVED_DISP = "SAVED_STATE";
+    private static final String SAVED_ACC = "SAVED_ACC";
+    private static final String SAVED_INIT = "SAVED_INIT";
+    private static final String OPERATION_BUNDLE_KEY = "OPERATION";
+    private static final int OPERATION_NONE = 0;
+    private static final int OPERATION_ADD = 1;
+    private static final int OPERATION_SUB = 2;
+    private static final int OPERATION_MUL = 3;
+    private static final int OPERATION_DIV = 4;
+
     private static final String TAG = "MainActivity";
-    String mOper;
     private TextView mDisp;
     float mAcc;
     Operation mLastOperation;
@@ -64,42 +71,21 @@ public class MainActivity extends Activity {
                         case R.id.mBtnAdd:
                             mPerformCalculus(new AddOperation(), input1);
                             mDisp.setText("");
-                            mOper=("+");
                             break;
                         case R.id.mBtnSub:
                             mPerformCalculus(new SubOperation(), input1);
                             mDisp.setText("");
-                            mOper = ("-");
                             break;
                         case R.id.mBtnMult:
                             mPerformCalculus(new MultOperation(), input1);
                             mDisp.setText("");
-                            mOper = ("*");
                             break;
                         case R.id.mBtnDiv:
                             mPerformCalculus(new DivOperation(), input1);
                             mDisp.setText("");
-                            mOper = ("/");
                             break;
                         case R.id.mBtnEqual:
-//                            mPerformCalculus(new Equal(), input1);
-                            if(mOper=="+"){
-                            mPerformCalculus(new AddOperation(), input1);
-                                mInitialized = true;
-                        }
-                            if(mOper=="-"){
-                                mPerformCalculus(new AddOperation(), input1);
-                                mInitialized = true;
-                            }
-                            if(mOper=="*"){
-                                mPerformCalculus(new AddOperation(), input1);
-                                mInitialized = true;
-                            }
-                            if(mOper=="/"){
-                                mPerformCalculus(new AddOperation(), input1);
-                                mInitialized = true;
-                            }
-
+                            mPerformCalculus(new Equal(), input1);
                             break;
                         default:
                             mDisp.append(((Button) view).getText());
@@ -231,23 +217,52 @@ public class MainActivity extends Activity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         String stateToSave = mDisp.getText().toString();
+        Boolean initToSave = mInitialized;
         Float accToSave = mAcc;
-        String operToSave = mOper;
-        outState.putString("saved_state", stateToSave);
-        outState.putFloat("acc_state",accToSave);
-        outState.putString("oper_state",operToSave);
+        outState.putString(SAVED_DISP, stateToSave);
+        outState.putFloat(SAVED_ACC, accToSave);
+        outState.putBoolean(SAVED_INIT, initToSave);
+
+        if (mLastOperation == null) {
+            outState.putInt(OPERATION_BUNDLE_KEY, OPERATION_NONE);
+        } else if (mLastOperation instanceof AddOperation) {
+            outState.putInt(OPERATION_BUNDLE_KEY, OPERATION_ADD);
+        } else if (mLastOperation instanceof SubOperation) {
+            outState.putInt(OPERATION_BUNDLE_KEY, OPERATION_SUB);
+        } else if (mLastOperation instanceof MultOperation) {
+            outState.putInt(OPERATION_BUNDLE_KEY, OPERATION_MUL);
+        } else if (mLastOperation instanceof DivOperation) {
+            outState.putInt(OPERATION_BUNDLE_KEY, OPERATION_DIV);
+        }
 
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        String savedState = savedInstanceState.getString("saved_state");
-        Float savedAcc = savedInstanceState.getFloat("acc_state");
-        String savedOper = savedInstanceState.getString("oper_state");
-        mOper = savedOper;
+        String savedState = savedInstanceState.getString(SAVED_DISP);
+        Float savedAcc = savedInstanceState.getFloat(SAVED_ACC);
+        Boolean savedInit = savedInstanceState.getBoolean(SAVED_INIT);
         mAcc = savedAcc;
         mDisp.setText(savedState);
+        mInitialized = savedInit;
+        int operation = savedInstanceState.getInt(OPERATION_BUNDLE_KEY);
+        switch (operation) {
+            case OPERATION_NONE:
+                mLastOperation = null;
+                break;
+            case OPERATION_ADD:
+                mLastOperation = new AddOperation();
+                break;
+            case OPERATION_SUB:
+                mLastOperation = new SubOperation();
+                break;
+            case OPERATION_MUL:
+                mLastOperation = new MultOperation();
+                break;
+            case OPERATION_DIV:
+                mLastOperation = new DivOperation();
+        }
     }
 }
 
