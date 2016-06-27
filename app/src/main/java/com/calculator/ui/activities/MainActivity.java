@@ -22,8 +22,15 @@ import java.util.regex.Pattern;
 public class MainActivity extends Activity {
 
 
-    private static Pattern INVALID_INPUT_PATTERN = Pattern.compile("(.*\\..*\\.)|(^0\\d) ");
-    private static Pattern INVALID_OPERATION = Pattern.compile("");
+    private static final String ANY_OPERATION_PATTERN = "[\\+\\-\\*/]";
+    private static Pattern INVALID_INPUT_PATTERN = Pattern.compile("(.*\\..*\\.)|(^0\\d)");
+    private static Pattern INVALID_OPERATION_PATTERN = Pattern.compile(
+                    "(.*" + ANY_OPERATION_PATTERN + ANY_OPERATION_PATTERN + ".*)"
+                            + "|(^)|");
+
+
+    //(.\++|\-+|\*+|\/+)
+//    private static Pattern INVALID_INPUT_PATTERN = Pattern.compile("(.\\.\\.)");
 
     private static final String SAVED_DISP = "SAVED_STATE";
     private static final String SAVED_ACC = "SAVED_ACC";
@@ -36,6 +43,10 @@ public class MainActivity extends Activity {
     private static final int OPERATION_DIV = 4;
 
     private static final String TAG = "MainActivity";
+    String[] mOperations;
+    String[] mFirstOrderOperation = {"*", "/"};
+    Float[] mNumbers;
+    String input1;
     private TextView mDisp;
     float mAcc;
     Operation mLastOperation;
@@ -54,43 +65,22 @@ public class MainActivity extends Activity {
     }
 
     private void mSetUpOperationbuttons() {
-        Button btnAdd = (Button) findViewById(R.id.mBtnAdd);
-        Button btnSub = (Button) findViewById(R.id.mBtnSub);
-        Button btnMult = (Button) findViewById(R.id.mBtnMult);
-        Button btnDiv = (Button) findViewById(R.id.mBtnDiv);
         Button btnClear = (Button) findViewById(R.id.mBtnClear);
         Button btnEqual = (Button) findViewById(R.id.mBtnEqual);
 
         View.OnClickListener operationButtonsOneClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mOperationIsValid(mDisp.getText().toString())) {
-                    float input1 = Float.parseFloat(mDisp.getText().toString());
-                    mDisp.setText("");
+                if (true/*mOperationIsValid(mDisp.getText().toString())*/) {
+                    input1 = mDisp.getText().toString();
                     switch (view.getId()) {
                         case R.id.mBtnClear:
                             mAcc = 0;
                             mInitialized = false;
                             mDisp.setText("");
                             break;
-                        case R.id.mBtnAdd:
-                            mPerformCalculus(new AddOperation(), input1);
-                            mDisp.setText("");
-                            break;
-                        case R.id.mBtnSub:
-                            mPerformCalculus(new SubOperation(), input1);
-                            mDisp.setText("");
-                            break;
-                        case R.id.mBtnMult:
-                            mPerformCalculus(new MultOperation(), input1);
-                            mDisp.setText("");
-                            break;
-                        case R.id.mBtnDiv:
-                            mPerformCalculus(new DivOperation(), input1);
-                            mDisp.setText(mDisp.getText().toString()+((Button) view).getText());
-                            break;
                         case R.id.mBtnEqual:
-                            mPerformCalculus(new Equal(), input1);
+                            // mPerformCalculus(new Equal(), input1);
                             break;
                         default:
                             mDisp.append(((Button) view).getText());
@@ -100,10 +90,6 @@ public class MainActivity extends Activity {
 
         };
 
-        btnAdd.setOnClickListener(operationButtonsOneClickListener);
-        btnSub.setOnClickListener(operationButtonsOneClickListener);
-        btnMult.setOnClickListener(operationButtonsOneClickListener);
-        btnDiv.setOnClickListener(operationButtonsOneClickListener);
         btnClear.setOnClickListener(operationButtonsOneClickListener);
         btnEqual.setOnClickListener(operationButtonsOneClickListener);
     }
@@ -120,6 +106,11 @@ public class MainActivity extends Activity {
         Button btn9 = (Button) findViewById(R.id.mBtn9);
         Button btn0 = (Button) findViewById(R.id.mBtn0);
         Button btnDot = (Button) findViewById(R.id.mBtnDot);
+        Button btnAdd = (Button) findViewById(R.id.mBtnAdd);
+        Button btnSub = (Button) findViewById(R.id.mBtnSub);
+        Button btnMult = (Button) findViewById(R.id.mBtnMult);
+        Button btnDiv = (Button) findViewById(R.id.mBtnDiv);
+
 
         View.OnClickListener digiButtonsClickLisetener = new View.OnClickListener() {
             @Override
@@ -144,27 +135,29 @@ public class MainActivity extends Activity {
         btn9.setOnClickListener(digiButtonsClickLisetener);
         btn0.setOnClickListener(digiButtonsClickLisetener);
         btnDot.setOnClickListener(digiButtonsClickLisetener);
+        btnAdd.setOnClickListener(digiButtonsClickLisetener);
+        btnSub.setOnClickListener(digiButtonsClickLisetener);
+        btnMult.setOnClickListener(digiButtonsClickLisetener);
+        btnDiv.setOnClickListener(digiButtonsClickLisetener);
 
     }
 
     private boolean mValueIsValid(String text) {
-        Matcher matcher = INVALID_INPUT_PATTERN.matcher(text);
+        Matcher matcher = INVALID_OPERATION_PATTERN.matcher(text);
         if (matcher.matches()) {
             Log.d(TAG, "detected invalid pattern");
             return false;
         }
-        return true;
-    }
-
-    private boolean mOperationIsValid(String text) {
-        Matcher matcher = INVALID_OPERATION.matcher(text);
-        if (matcher.matches()) {
-            Log.d(TAG, "detected invalid pattern");
-            return false;
+        String[] operatorsStrings = text.split(ANY_OPERATION_PATTERN);
+        for (String part : operatorsStrings) {
+            matcher = INVALID_INPUT_PATTERN.matcher(part);
+            if (part.isEmpty() || matcher.matches()) {
+                Log.d(TAG, "detected invalid pattern");
+                return false;
+            }
         }
         return true;
     }
-
 
     private void mPerformCalculus(Operation newOperation, float input) {
         if (!mInitialized) {
@@ -229,6 +222,12 @@ public class MainActivity extends Activity {
                 mLastOperation = new DivOperation();
         }
     }
+//    private void MultiOperations(){
+//        n =
+//        char Lista[]=input1.toCharArray();
+//        for(int i=0;i<)
+//
+//    }
 }
 
 
