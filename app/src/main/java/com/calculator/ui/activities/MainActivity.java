@@ -10,11 +10,12 @@ import android.widget.TextView;
 import com.calculator.R;
 import com.calculator.math.AddOperation;
 import com.calculator.math.DivOperation;
-import com.calculator.math.Equal;
 import com.calculator.math.MultOperation;
 import com.calculator.math.Operation;
 import com.calculator.math.SubOperation;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,12 +26,10 @@ public class MainActivity extends Activity {
     private static final String ANY_OPERATION_PATTERN = "[\\+\\-\\*/]";
     private static Pattern INVALID_INPUT_PATTERN = Pattern.compile("(.*\\..*\\.)|(^0\\d)");
     private static Pattern INVALID_OPERATION_PATTERN = Pattern.compile(
-                    "(.*" + ANY_OPERATION_PATTERN + ANY_OPERATION_PATTERN + ".*)"
-                            + "|(^)|");
+            "(.*" + ANY_OPERATION_PATTERN + ANY_OPERATION_PATTERN + ".*)"
+                    + "|(^" + ANY_OPERATION_PATTERN + ")" +
+                    "|(.*\\." + ANY_OPERATION_PATTERN + ")" + "|(.*" + ANY_OPERATION_PATTERN + "\\.)");
 
-
-    //(.\++|\-+|\*+|\/+)
-//    private static Pattern INVALID_INPUT_PATTERN = Pattern.compile("(.\\.\\.)");
 
     private static final String SAVED_DISP = "SAVED_STATE";
     private static final String SAVED_ACC = "SAVED_ACC";
@@ -43,14 +42,13 @@ public class MainActivity extends Activity {
     private static final int OPERATION_DIV = 4;
 
     private static final String TAG = "MainActivity";
-    String[] mOperations;
-    String[] mFirstOrderOperation = {"*", "/"};
-    Float[] mNumbers;
     String input1;
     private TextView mDisp;
     float mAcc;
     Operation mLastOperation;
     boolean mInitialized;
+    private ArrayList<Operation> mOperations;
+    private ArrayList<Float> mOperators;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,7 +69,7 @@ public class MainActivity extends Activity {
         View.OnClickListener operationButtonsOneClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (true/*mOperationIsValid(mDisp.getText().toString())*/) {
+                if (true) {
                     input1 = mDisp.getText().toString();
                     switch (view.getId()) {
                         case R.id.mBtnClear:
@@ -80,7 +78,9 @@ public class MainActivity extends Activity {
                             mDisp.setText("");
                             break;
                         case R.id.mBtnEqual:
-                            // mPerformCalculus(new Equal(), input1);
+                            parseInput(input1);
+                            float result = evaluateOperations(mOperators, mOperations);
+                            mDisp.setText(result + "");
                             break;
                         default:
                             mDisp.append(((Button) view).getText());
@@ -159,18 +159,6 @@ public class MainActivity extends Activity {
         return true;
     }
 
-    private void mPerformCalculus(Operation newOperation, float input) {
-        if (!mInitialized) {
-            mAcc = input;
-            mInitialized = true;
-        } else {
-            mAcc = mLastOperation.performOperation(mAcc, input);
-            mDisp.setText(Float.toString(mAcc).trim());
-
-        }
-        mLastOperation = newOperation;
-    }
-
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -222,12 +210,74 @@ public class MainActivity extends Activity {
                 mLastOperation = new DivOperation();
         }
     }
-//    private void MultiOperations(){
-//        n =
-//        char Lista[]=input1.toCharArray();
-//        for(int i=0;i<)
-//
-//    }
+
+    private void parseInput(String input) {
+        int mLastSign = -1;
+        int mStartPos = 0;
+        int mCurPos;
+        char[] charArray = input.toCharArray();
+        int n = charArray.length;
+        mOperators = new ArrayList<>();
+        mOperations = new ArrayList<>();
+        List<Character> signs = new ArrayList<>();
+        signs.add('+');
+        signs.add('-');
+        signs.add('*');
+        signs.add('/');
+        for (mCurPos = 0; mCurPos < n; mCurPos++) {
+            if (signs.contains(charArray[mCurPos])) {
+                mStartPos = mLastSign + 1;
+                mLastSign = mCurPos;
+                String substring = input.substring(mStartPos, mCurPos);
+                Float value = Float.parseFloat(substring);
+                mOperators.add(value);
+                Operation operation = null;
+                switch (charArray[mCurPos]) {
+                    case '+':
+                        operation = new AddOperation();
+                        break;
+                    case '-':
+                        operation = new SubOperation();
+                        break;
+                    case '*':
+                        operation = new MultOperation();
+                        break;
+                    case '/':
+                        operation = new DivOperation();
+                        break;
+                }
+                mOperations.add(operation);
+            }
+        }
+        mStartPos = mLastSign + 1;
+        String substring = input.substring(mStartPos, mCurPos);
+        Float value = Float.parseFloat(substring);
+        mOperators.add(value);
+    }
+
+    private float evaluateOperations(List<Float> operators, List<Operation> operations) {
+        for (int i = 0; i < operations.size(); i++) {
+            Operation operation = operations.get(i);
+            if (operation instanceof MultOperation || operation instanceof DivOperation) {
+                float result = operation.performOperation(operators.get(i), operators.get(i + 1));
+                operators.remove(i);
+                operators.remove(i);
+                operators.add(i, result);
+                operations.remove(i);
+                i--;
+            }
+        }
+        for (int i = 0; i < operations.size(); i++) {
+            Operation operation = operations.get(i);
+            float result = operation.performOperation(operators.get(i), operators.get(i + 1));
+            operators.remove(i);
+            operators.remove(i);
+            operators.add(i, result);
+            operations.remove(i);
+            i--;
+        }
+        return operators.get(0);
+    }
 }
 
 
