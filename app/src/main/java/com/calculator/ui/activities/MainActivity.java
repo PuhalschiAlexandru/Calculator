@@ -25,6 +25,7 @@ public class MainActivity extends Activity {
 
     private static final String ANY_OPERATION_PATTERN = "[\\+\\-\\*/]";
     private static Pattern INVALID_INPUT_PATTERN = Pattern.compile("(.*\\..*\\.)|(^0\\d)");
+    private static Pattern INVALID_EQUAL = Pattern.compile("(.*" + ANY_OPERATION_PATTERN + ")");
     private static Pattern INVALID_OPERATION_PATTERN = Pattern.compile(
             "(.*" + ANY_OPERATION_PATTERN + ANY_OPERATION_PATTERN + ".*)"
                     + "|(^" + ANY_OPERATION_PATTERN + ")" +
@@ -32,21 +33,10 @@ public class MainActivity extends Activity {
 
 
     private static final String SAVED_DISP = "SAVED_STATE";
-    private static final String SAVED_ACC = "SAVED_ACC";
-    private static final String SAVED_INIT = "SAVED_INIT";
-    private static final String OPERATION_BUNDLE_KEY = "OPERATION";
-    private static final int OPERATION_NONE = 0;
-    private static final int OPERATION_ADD = 1;
-    private static final int OPERATION_SUB = 2;
-    private static final int OPERATION_MUL = 3;
-    private static final int OPERATION_DIV = 4;
-
     private static final String TAG = "MainActivity";
-    String input1;
+
+    private String input1;
     private TextView mDisp;
-    float mAcc;
-    Operation mLastOperation;
-    boolean mInitialized;
     private ArrayList<Operation> mOperations;
     private ArrayList<Float> mOperators;
 
@@ -58,8 +48,6 @@ public class MainActivity extends Activity {
         mSetUpOperationbuttons();
 
         mDisp = (TextView) findViewById(R.id.mDisplay);
-
-        mInitialized = false;
     }
 
     private void mSetUpOperationbuttons() {
@@ -69,25 +57,22 @@ public class MainActivity extends Activity {
         View.OnClickListener operationButtonsOneClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (true) {
-                    input1 = mDisp.getText().toString();
-                    switch (view.getId()) {
-                        case R.id.mBtnClear:
-                            mAcc = 0;
-                            mInitialized = false;
-                            mDisp.setText("");
-                            break;
-                        case R.id.mBtnEqual:
+                input1 = mDisp.getText().toString();
+                switch (view.getId()) {
+                    case R.id.mBtnClear:
+                        mDisp.setText("");
+                        break;
+                    case R.id.mBtnEqual:
+                        if (mOperationIsValid(mDisp.getText().toString())) {
                             parseInput(input1);
                             float result = evaluateOperations(mOperators, mOperations);
                             mDisp.setText(result + "");
-                            break;
-                        default:
-                            mDisp.append(((Button) view).getText());
-                    }
+                        }
+                        break;
+                    default:
+                        mDisp.append(((Button) view).getText());
                 }
             }
-
         };
 
         btnClear.setOnClickListener(operationButtonsOneClickListener);
@@ -139,7 +124,6 @@ public class MainActivity extends Activity {
         btnSub.setOnClickListener(digiButtonsClickLisetener);
         btnMult.setOnClickListener(digiButtonsClickLisetener);
         btnDiv.setOnClickListener(digiButtonsClickLisetener);
-
     }
 
     private boolean mValueIsValid(String text) {
@@ -159,56 +143,27 @@ public class MainActivity extends Activity {
         return true;
     }
 
+    private boolean mOperationIsValid(String text) {
+        Matcher matcher = INVALID_EQUAL.matcher(text);
+        if (matcher.matches()) {
+            Log.d(TAG, "detected invalid pattern");
+            return false;
+        }
+        return true;
+    }
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         String stateToSave = mDisp.getText().toString();
-        Boolean initToSave = mInitialized;
-        Float accToSave = mAcc;
         outState.putString(SAVED_DISP, stateToSave);
-        outState.putFloat(SAVED_ACC, accToSave);
-        outState.putBoolean(SAVED_INIT, initToSave);
-
-        if (mLastOperation == null) {
-            outState.putInt(OPERATION_BUNDLE_KEY, OPERATION_NONE);
-        } else if (mLastOperation instanceof AddOperation) {
-            outState.putInt(OPERATION_BUNDLE_KEY, OPERATION_ADD);
-        } else if (mLastOperation instanceof SubOperation) {
-            outState.putInt(OPERATION_BUNDLE_KEY, OPERATION_SUB);
-        } else if (mLastOperation instanceof MultOperation) {
-            outState.putInt(OPERATION_BUNDLE_KEY, OPERATION_MUL);
-        } else if (mLastOperation instanceof DivOperation) {
-            outState.putInt(OPERATION_BUNDLE_KEY, OPERATION_DIV);
-        }
-
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         String savedState = savedInstanceState.getString(SAVED_DISP);
-        Float savedAcc = savedInstanceState.getFloat(SAVED_ACC);
-        Boolean savedInit = savedInstanceState.getBoolean(SAVED_INIT);
-        mAcc = savedAcc;
         mDisp.setText(savedState);
-        mInitialized = savedInit;
-        int operation = savedInstanceState.getInt(OPERATION_BUNDLE_KEY);
-        switch (operation) {
-            case OPERATION_NONE:
-                mLastOperation = null;
-                break;
-            case OPERATION_ADD:
-                mLastOperation = new AddOperation();
-                break;
-            case OPERATION_SUB:
-                mLastOperation = new SubOperation();
-                break;
-            case OPERATION_MUL:
-                mLastOperation = new MultOperation();
-                break;
-            case OPERATION_DIV:
-                mLastOperation = new DivOperation();
-        }
     }
 
     private void parseInput(String input) {
