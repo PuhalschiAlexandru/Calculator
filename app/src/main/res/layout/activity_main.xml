@@ -13,29 +13,18 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
         android:layout_above="@+id/layout1"
+        android:gravity="center"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="15dp"
-            android:text="Introduceti Numerele:"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            style="@style/TextViewStyle"
+            android:text="Introduceti Numerele:" />
 
         <TextView
             android:id="@+id/mDisplay"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginBottom="10dp"
-            android:gravity="end"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textCursorDrawable="@null" />
+            style="@style/DisplayStyle" />
     </LinearLayout>
 
 
@@ -58,7 +47,7 @@
 
             <Button
                 android:id="@+id/mBtn7"
-                android:onClick="write7"
+                style="@style/GreyButton"
                 android:text="7"
                 app:layout_column="0"
                 app:layout_columnWeight="1"
@@ -67,6 +56,7 @@
 
             <Button
                 android:id="@+id/mBtn8"
+                style="@style/GreyButton"
                 android:text="8"
                 app:layout_column="1"
                 app:layout_columnWeight="1"
@@ -75,6 +65,7 @@
 
             <Button
                 android:id="@+id/mBtn9"
+                style="@style/GreyButton"
                 android:text="9"
                 app:layout_column="2"
                 app:layout_columnWeight="1"
@@ -83,6 +74,7 @@
 
             <Button
                 android:id="@+id/mBtn4"
+                style="@style/GreyButton"
                 android:text="4"
                 app:layout_column="0"
                 app:layout_columnWeight="1"
@@ -91,6 +83,7 @@
 
             <Button
                 android:id="@+id/mBtn5"
+                style="@style/GreyButton"
                 android:text="5"
                 app:layout_column="1"
                 app:layout_columnWeight="1"
@@ -99,6 +92,7 @@
 
             <Button
                 android:id="@+id/mBtn1"
+                style="@style/GreyButton"
                 android:text="1"
                 app:layout_column="0"
                 app:layout_columnWeight="1"
@@ -107,6 +101,7 @@
 
             <Button
                 android:id="@+id/mBtn2"
+                style="@style/GreyButton"
                 android:text="2"
                 app:layout_column="1"
                 app:layout_columnWeight="1"
@@ -115,6 +110,7 @@
 
             <Button
                 android:id="@+id/mBtn3"
+                style="@style/GreyButton"
                 android:text="3"
                 app:layout_column="2"
                 app:layout_columnWeight="1"
@@ -123,6 +119,7 @@
 
             <Button
                 android:id="@+id/mBtnDot"
+                style="@style/GreyButton"
                 android:text="."
                 app:layout_column="1"
                 app:layout_columnWeight="1"
@@ -131,6 +128,7 @@
 
             <Button
                 android:id="@+id/mBtnEqual"
+                style="@style/GreyButton"
                 android:text="="
                 app:layout_column="2"
                 app:layout_columnWeight="1"
@@ -139,6 +137,7 @@
 
             <Button
                 android:id="@+id/mBtn6"
+                style="@style/GreyButton"
                 android:text="6"
                 app:layout_column="2"
                 app:layout_columnWeight="1"
@@ -147,6 +146,7 @@
 
             <Button
                 android:id="@+id/mBtn0"
+                style="@style/GreyButton"
                 android:text="0"
                 app:layout_column="0"
                 app:layout_columnWeight="1"
@@ -166,32 +166,27 @@
 
             <com.calculator.ui.widgets.SquareButton
                 android:id="@+id/mBtnClear"
-                android:layout_width="match_parent"
-                android:layout_height="74dp"
+                style="@style/BlackButton"
                 android:text="C" />
 
             <com.calculator.ui.widgets.SquareButton
                 android:id="@+id/mBtnAdd"
-                android:layout_width="match_parent"
-                android:layout_height="74dp"
+                style="@style/BlackButton"
                 android:text="+" />
 
             <com.calculator.ui.widgets.SquareButton
                 android:id="@+id/mBtnSub"
-                android:layout_width="match_parent"
-                android:layout_height="74dp"
+                style="@style/BlackButton"
                 android:text="-" />
 
             <com.calculator.ui.widgets.SquareButton
                 android:id="@+id/mBtnMult"
-                android:layout_width="match_parent"
-                android:layout_height="74dp"
+                style="@style/BlackButton"
                 android:text="*" />
 
             <com.calculator.ui.widgets.SquareButton
                 android:id="@+id/mBtnDiv"
-                android:layout_width="match_parent"
-                android:layout_height="74dp"
+                style="@style/BlackButton"
                 android:text="/" />
 
 

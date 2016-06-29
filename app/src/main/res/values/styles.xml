@@ -1,11 +1,87 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="android:Theme.Holo.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:background">#000000</item>
+
     </style>
 
+    <style name="GreyButton">
+        <item name="android:textColor">#F5F5F5</item>
+        <item name="android:background">@drawable/button_selected</item>
+        <item name="android:layout_margin">2dp</item>
+    </style>
+
+    <style name="BlackButton">
+        <item name="android:textColor">#F5F5F5</item>
+        <item name="android:background">@drawable/operation_selected</item>
+        <item name="android:layout_margin">2dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">74dp</item>
+
+    </style>
+
+    <style name="BlackLandButton">
+        <item name="android:textColor">#F5F5F5</item>
+        <item name="android:background">@drawable/operation_selected</item>
+        <item name="android:layout_margin">2dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+
+
+    </style>
+
+    <style name="DisplayStyle">
+        <item name="android:background">#37474F</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">end</item>
+        <item name="android:layout_gravity">right</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+        <item name="android:textCursorDrawable">@null</item>
+        <item name="android:textSize">@dimen/DisplaySize</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:inputType">text</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <style name="TextViewStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:layout_gravity">right</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:layout_marginTop">15dp</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+    </style>
+
+    <style name="LandDisplayStyle">
+        <item name="android:background">#37474F</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:gravity">end</item>
+        <item name="android:layout_below">@+id/textView</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+        <item name="android:textCursorDrawable">@null</item>
+        <item name="android:textSize">@dimen/LandDisplaySize</item>
+        <item name="android:inputType">text</item>
+        <item name="android:maxLines">1</item>
+    </style>
+    <style name="LandTextViewStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentTop">true</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+    </style>
 </resources>
