@@ -3,7 +3,6 @@ package com.calculator.ui.activities;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Display;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -28,7 +27,8 @@ public class MainActivity extends Activity {
     private static final String SIMPLE_OPERATION_PATTERN = "[\\-\\+]";
     private static final String INFINIT_PATTERN = "[a-z]";
     private static Pattern INVALID_INPUT_PATTERN = Pattern.compile("(.*\\..*\\.)|(^0\\d)");
-    private static Pattern INVALID_EQUAL = Pattern.compile("(.*" + MULTIPLICATION_OPERATION_PATTERN + ")" + "|(^)" + "|(.*" + SIMPLE_OPERATION_PATTERN + ")"+"|(.*"+INFINIT_PATTERN+".*)");
+    private static Pattern INVALID_EQUAL = Pattern.compile("(.*" + MULTIPLICATION_OPERATION_PATTERN + ")" + "|(^)"
+            + "|(.*" + SIMPLE_OPERATION_PATTERN + ")" + "|(.*" + INFINIT_PATTERN + ".*)");
     private static Pattern INVALID_OPERATION_PATTERN = Pattern.compile(
             "(.*" + MULTIPLICATION_OPERATION_PATTERN + MULTIPLICATION_OPERATION_PATTERN + ".*)"
                     + "|(^" + MULTIPLICATION_OPERATION_PATTERN + ")"
@@ -36,16 +36,23 @@ public class MainActivity extends Activity {
                     + "|(.*" + MULTIPLICATION_OPERATION_PATTERN + "\\.)"
                     + "|(.*\\." + SIMPLE_OPERATION_PATTERN + ")"
                     + "|(.*" + SIMPLE_OPERATION_PATTERN + "\\.)"
-                    + "|(.*" + SIMPLE_OPERATION_PATTERN + MULTIPLICATION_OPERATION_PATTERN + SIMPLE_OPERATION_PATTERN + ".*)"
-                    + "|(.*" + MULTIPLICATION_OPERATION_PATTERN + SIMPLE_OPERATION_PATTERN + MULTIPLICATION_OPERATION_PATTERN + ".*)"
-                    + "|(.*" + SIMPLE_OPERATION_PATTERN + MULTIPLICATION_OPERATION_PATTERN + MULTIPLICATION_OPERATION_PATTERN + ".*)"
+                    + "|(.*" + SIMPLE_OPERATION_PATTERN + MULTIPLICATION_OPERATION_PATTERN
+                    + SIMPLE_OPERATION_PATTERN + ".*)"
+                    + "|(.*" + MULTIPLICATION_OPERATION_PATTERN + SIMPLE_OPERATION_PATTERN
+                    + MULTIPLICATION_OPERATION_PATTERN + ".*)"
+                    + "|(.*" + SIMPLE_OPERATION_PATTERN + MULTIPLICATION_OPERATION_PATTERN
+                    + MULTIPLICATION_OPERATION_PATTERN + ".*)"
                     + "|(^" + SIMPLE_OPERATION_PATTERN + MULTIPLICATION_OPERATION_PATTERN + ")"
                     + "|(.*" + MULTIPLICATION_OPERATION_PATTERN + MULTIPLICATION_OPERATION_PATTERN + ")");
-    private static Pattern SWITCH_PATTERN = Pattern.compile("(.*" + SIMPLE_OPERATION_PATTERN + SIMPLE_OPERATION_PATTERN + MULTIPLICATION_OPERATION_PATTERN + ")");
-    private static Pattern REPLACE_PATTERN = Pattern.compile("(.*" + SIMPLE_OPERATION_PATTERN + SIMPLE_OPERATION_PATTERN + SIMPLE_OPERATION_PATTERN + ")");
-    private static Pattern SWITCH_PATTERN1 = Pattern.compile("(.*" + SIMPLE_OPERATION_PATTERN + MULTIPLICATION_OPERATION_PATTERN + ")"
+    private static Pattern SWITCH_PATTERN = Pattern.compile("(.*" + SIMPLE_OPERATION_PATTERN
+            + SIMPLE_OPERATION_PATTERN + MULTIPLICATION_OPERATION_PATTERN + ")");
+    private static Pattern REPLACE_PATTERN = Pattern.compile("(.*" + SIMPLE_OPERATION_PATTERN
+            + SIMPLE_OPERATION_PATTERN + SIMPLE_OPERATION_PATTERN + ")");
+    private static Pattern SWITCH_PATTERN1 = Pattern.compile("(.*" + SIMPLE_OPERATION_PATTERN
+            + MULTIPLICATION_OPERATION_PATTERN + ")"
             + "|(.*" + SIMPLE_OPERATION_PATTERN + SIMPLE_OPERATION_PATTERN + ")");
-    private static Pattern SWITCH_PATTERN2 = Pattern.compile("(.*" + MULTIPLICATION_OPERATION_PATTERN + MULTIPLICATION_OPERATION_PATTERN + ")");
+    private static Pattern SWITCH_PATTERN2 = Pattern.compile("(.*" + MULTIPLICATION_OPERATION_PATTERN
+            + MULTIPLICATION_OPERATION_PATTERN + ")");
 
     private static final String SAVED_DISP = "SAVED_STATE";
     private static final String TAG = "MainActivity";
@@ -135,7 +142,7 @@ public class MainActivity extends Activity {
                             break;
                     }
                 }
-                if (mSwitchIsValid1(newValue)&&mValueIsValid(newValue)) {
+                if (mSwitchIsValid1(newValue) && mValueIsValid(newValue)) {
                     switch (view.getId()) {
                         case R.id.mBtnAdd:
                             newValue = newValue.substring(0, newValue.length() - 2);
@@ -174,7 +181,7 @@ public class MainActivity extends Activity {
 
                     }
                 }
-                if (mReplaceIsValid(newValue) ) {
+                if (mReplaceIsValid(newValue)) {
                     switch (view.getId()) {
                         case R.id.mBtnAdd:
                             newValue = newValue.substring(0, newValue.length() - 2);
@@ -253,6 +260,7 @@ public class MainActivity extends Activity {
         }
         return false;
     }
+
     private boolean mSwitchIsValid2(String text) {
         Matcher matcher = SWITCH_PATTERN2.matcher(text);
         if (matcher.matches()) {
