@@ -3,6 +3,7 @@ package com.calculator.ui.activities;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -23,14 +24,28 @@ import java.util.regex.Pattern;
 public class MainActivity extends Activity {
 
 
-    private static final String ANY_OPERATION_PATTERN = "[\\+\\-\\*/]";
+    private static final String MULTIPLICATION_OPERATION_PATTERN = "[\\*/]";
+    private static final String SIMPLE_OPERATION_PATTERN = "[\\-\\+]";
+    private static final String INFINIT_PATTERN = "[a-z]";
     private static Pattern INVALID_INPUT_PATTERN = Pattern.compile("(.*\\..*\\.)|(^0\\d)");
-    private static Pattern INVALID_EQUAL = Pattern.compile("(.*" + ANY_OPERATION_PATTERN + ")");
+    private static Pattern INVALID_EQUAL = Pattern.compile("(.*" + MULTIPLICATION_OPERATION_PATTERN + ")" + "|(^)" + "|(.*" + SIMPLE_OPERATION_PATTERN + ")"+"|(.*"+INFINIT_PATTERN+".*)");
     private static Pattern INVALID_OPERATION_PATTERN = Pattern.compile(
-            "(.*" + ANY_OPERATION_PATTERN + ANY_OPERATION_PATTERN + ".*)"
-                    + "|(^" + ANY_OPERATION_PATTERN + ")" +
-                    "|(.*\\." + ANY_OPERATION_PATTERN + ")" + "|(.*" + ANY_OPERATION_PATTERN + "\\.)");
-
+            "(.*" + MULTIPLICATION_OPERATION_PATTERN + MULTIPLICATION_OPERATION_PATTERN + ".*)"
+                    + "|(^" + MULTIPLICATION_OPERATION_PATTERN + ")"
+                    + "|(.*\\." + MULTIPLICATION_OPERATION_PATTERN + ")"
+                    + "|(.*" + MULTIPLICATION_OPERATION_PATTERN + "\\.)"
+                    + "|(.*\\." + SIMPLE_OPERATION_PATTERN + ")"
+                    + "|(.*" + SIMPLE_OPERATION_PATTERN + "\\.)"
+                    + "|(.*" + SIMPLE_OPERATION_PATTERN + MULTIPLICATION_OPERATION_PATTERN + SIMPLE_OPERATION_PATTERN + ".*)"
+                    + "|(.*" + MULTIPLICATION_OPERATION_PATTERN + SIMPLE_OPERATION_PATTERN + MULTIPLICATION_OPERATION_PATTERN + ".*)"
+                    + "|(.*" + SIMPLE_OPERATION_PATTERN + MULTIPLICATION_OPERATION_PATTERN + MULTIPLICATION_OPERATION_PATTERN + ".*)"
+                    + "|(^" + SIMPLE_OPERATION_PATTERN + MULTIPLICATION_OPERATION_PATTERN + ")"
+                    + "|(.*" + MULTIPLICATION_OPERATION_PATTERN + MULTIPLICATION_OPERATION_PATTERN + ")");
+    private static Pattern SWITCH_PATTERN = Pattern.compile("(.*" + SIMPLE_OPERATION_PATTERN + SIMPLE_OPERATION_PATTERN + MULTIPLICATION_OPERATION_PATTERN + ")");
+    private static Pattern REPLACE_PATTERN = Pattern.compile("(.*" + SIMPLE_OPERATION_PATTERN + SIMPLE_OPERATION_PATTERN + SIMPLE_OPERATION_PATTERN + ")");
+    private static Pattern SWITCH_PATTERN1 = Pattern.compile("(.*" + SIMPLE_OPERATION_PATTERN + MULTIPLICATION_OPERATION_PATTERN + ")"
+            + "|(.*" + SIMPLE_OPERATION_PATTERN + SIMPLE_OPERATION_PATTERN + ")");
+    private static Pattern SWITCH_PATTERN2 = Pattern.compile("(.*" + MULTIPLICATION_OPERATION_PATTERN + MULTIPLICATION_OPERATION_PATTERN + ")");
 
     private static final String SAVED_DISP = "SAVED_STATE";
     private static final String TAG = "MainActivity";
@@ -106,6 +121,75 @@ public class MainActivity extends Activity {
                 } else if (mValueIsValid(newValue)) {
                     mDisp.setText(newValue);
                 }
+                if (mSwitchIsValid(newValue)) {
+                    switch (view.getId()) {
+                        case R.id.mBtnMult:
+                            newValue = newValue.substring(0, newValue.length() - 3);
+                            mDisp.setText(newValue);
+                            mDisp.append(((Button) view).getText());
+                            break;
+                        case R.id.mBtnDiv:
+                            newValue = newValue.substring(0, newValue.length() - 3);
+                            mDisp.setText(newValue);
+                            mDisp.append(((Button) view).getText());
+                            break;
+                    }
+                }
+                if (mSwitchIsValid1(newValue)&&mValueIsValid(newValue)) {
+                    switch (view.getId()) {
+                        case R.id.mBtnAdd:
+                            newValue = newValue.substring(0, newValue.length() - 2);
+                            mDisp.setText(newValue);
+                            mDisp.append(((Button) view).getText());
+                            break;
+                        case R.id.mBtnSub:
+                            newValue = newValue.substring(0, newValue.length() - 2);
+                            mDisp.setText(newValue);
+                            mDisp.append(((Button) view).getText());
+                            break;
+                        case R.id.mBtnMult:
+                            newValue = newValue.substring(0, newValue.length() - 2);
+                            mDisp.setText(newValue);
+                            mDisp.append(((Button) view).getText());
+                            break;
+                        case R.id.mBtnDiv:
+                            newValue = newValue.substring(0, newValue.length() - 2);
+                            mDisp.setText(newValue);
+                            mDisp.append(((Button) view).getText());
+                            break;
+                    }
+                }
+                if (mSwitchIsValid2(newValue)) {
+                    switch (view.getId()) {
+                        case R.id.mBtnMult:
+                            newValue = newValue.substring(0, newValue.length() - 2);
+                            mDisp.setText(newValue);
+                            mDisp.append(((Button) view).getText());
+                            break;
+                        case R.id.mBtnDiv:
+                            newValue = newValue.substring(0, newValue.length() - 2);
+                            mDisp.setText(newValue);
+                            mDisp.append(((Button) view).getText());
+                            break;
+
+                    }
+                }
+                if (mReplaceIsValid(newValue) ) {
+                    switch (view.getId()) {
+                        case R.id.mBtnAdd:
+                            newValue = newValue.substring(0, newValue.length() - 2);
+                            mDisp.setText(newValue);
+                            mDisp.append(((Button) view).getText());
+                            break;
+                        case R.id.mBtnSub:
+                            newValue = newValue.substring(0, newValue.length() - 2);
+                            mDisp.setText(newValue);
+                            mDisp.append(((Button) view).getText());
+                            break;
+                    }
+                }
+
+
             }
         };
 
@@ -129,18 +213,53 @@ public class MainActivity extends Activity {
     private boolean mValueIsValid(String text) {
         Matcher matcher = INVALID_OPERATION_PATTERN.matcher(text);
         if (matcher.matches()) {
-            Log.d(TAG, "detected invalid pattern");
+            Log.d(TAG, "detected invalid operation pattern");
             return false;
         }
-        String[] operatorsStrings = text.split(ANY_OPERATION_PATTERN);
+        String[] operatorsStrings = text.split(MULTIPLICATION_OPERATION_PATTERN);
         for (String part : operatorsStrings) {
             matcher = INVALID_INPUT_PATTERN.matcher(part);
             if (part.isEmpty() || matcher.matches()) {
-                Log.d(TAG, "detected invalid pattern");
+                Log.d(TAG, "detected invalid input pattern");
                 return false;
             }
         }
         return true;
+    }
+
+    private boolean mSwitchIsValid(String text) {
+        Matcher matcher = SWITCH_PATTERN.matcher(text);
+        if (matcher.matches()) {
+            Log.d(TAG, "detected switch operation pattern");
+            return true;
+        }
+        return false;
+    }
+
+    private boolean mReplaceIsValid(String text) {
+        Matcher matcher = REPLACE_PATTERN.matcher(text);
+        if (matcher.matches()) {
+            Log.d(TAG, "detected replace  operation pattern");
+            return true;
+        }
+        return false;
+    }
+
+    private boolean mSwitchIsValid1(String text) {
+        Matcher matcher = SWITCH_PATTERN1.matcher(text);
+        if (matcher.matches()) {
+            Log.d(TAG, "detected switch1 operation pattern");
+            return true;
+        }
+        return false;
+    }
+    private boolean mSwitchIsValid2(String text) {
+        Matcher matcher = SWITCH_PATTERN2.matcher(text);
+        if (matcher.matches()) {
+            Log.d(TAG, "detected switch2 operation pattern");
+            return true;
+        }
+        return false;
     }
 
     private boolean mOperationIsValid(String text) {
@@ -180,6 +299,9 @@ public class MainActivity extends Activity {
         signs.add('*');
         signs.add('/');
         for (mCurPos = 0; mCurPos < n; mCurPos++) {
+            if (signs.contains(charArray[mCurPos]) && (mCurPos == 0)) {
+                mCurPos = mCurPos + 1;
+            }
             if (signs.contains(charArray[mCurPos])) {
                 mStartPos = mLastSign + 1;
                 mLastSign = mCurPos;
@@ -203,11 +325,15 @@ public class MainActivity extends Activity {
                 }
                 mOperations.add(operation);
             }
+            if (signs.contains(charArray[mCurPos]) && signs.contains(charArray[mCurPos + 1])) {
+                mCurPos = mCurPos + 1;
+            }
         }
         mStartPos = mLastSign + 1;
         String substring = input.substring(mStartPos, mCurPos);
         Float value = Float.parseFloat(substring);
         mOperators.add(value);
+
     }
 
     private float evaluateOperations(List<Float> operators, List<Operation> operations) {
