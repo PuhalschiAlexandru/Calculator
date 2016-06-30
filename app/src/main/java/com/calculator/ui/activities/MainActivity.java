@@ -26,7 +26,7 @@ public class MainActivity extends Activity {
     private static final String MULTIPLICATION_OPERATION_PATTERN = "[\\*/]";
     private static final String SIMPLE_OPERATION_PATTERN = "[\\-\\+]";
     private static final String INFINIT_PATTERN = "[a-z]";
-    private static Pattern INVALID_INPUT_PATTERN = Pattern.compile("(.*\\..*\\.)|(^0\\d)");
+    private static Pattern INVALID_INPUT_PATTERN = Pattern.compile("(.*\\d+\\.+\\d+\\.)|(^0\\d)|(.*\\.\\.)");
     private static Pattern INVALID_EQUAL = Pattern.compile("(.*" + MULTIPLICATION_OPERATION_PATTERN + ")" + "|(^)"
             + "|(.*" + SIMPLE_OPERATION_PATTERN + ")" + "|(.*" + INFINIT_PATTERN + ".*)");
     private static Pattern INVALID_OPERATION_PATTERN = Pattern.compile(
